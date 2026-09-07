@@ -7,8 +7,8 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
-import handleEvent from './handleEvent'
-import onReady from './onReady'
+import handleEvent from '../stores/handleEvent'
+import onReady from '../stores/onReady'
 
 const statusText = ref('正在连接飞渡视频流...')
 
