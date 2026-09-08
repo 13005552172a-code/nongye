@@ -10,7 +10,7 @@
 import { ref } from 'vue'
 import VideoStreamPlayer from './components/VideoStreamPlayer.vue'
 import FarmToggleButton from './components/FarmToggleButton.vue'
-import { clearPOlygon3D, PylogonePlace } from './view/First/index.ts'
+import { clearPOlygon3D, playPolygon3D, PylogonePlace } from './view/First/index.ts'
 
 // ==================== 插秧机轨迹按钮 ====================
 
@@ -53,9 +53,11 @@ const handleFieldToggle = (visible: boolean) => {
     if (visible) {
         // TODO: 选中 —— 在这里写显示农田地块的方法
         console.log('显示农田地块')
+        playPolygon3D()
     } else if (!visible) {
         // TODO: 取消选中 —— 在这里写隐藏农田地块的方法
         console.log('隐藏农田地块')
+        clearPOlygon3D()
     }
 }
 </script>
