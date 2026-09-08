@@ -2,12 +2,29 @@
  * AirCity 3D 场景初始化
  *
  * 当视频流连接成功后，此函数会被调用。
- * 负责设置天气、隐藏 UI、设置相机位置、绑定点击事件等。
+ * 负责场景基础设置、天气、相机位置等。
  */
 
 // 记录 onReady 是否已执行
 let isOnReady = false
 export const getIsOnReady = () => isOnReady
+
+// 断线重连时重置，让重连成功后能重新执行场景初始化
+export const resetIsOnReady = () => {
+    isOnReady = false
+}
+
+/**
+ * 场景基础设置
+ * - 隐藏指南针
+ * - 隐藏主界面 UI
+ * - 重置场景
+ */
+const initScene = () => {
+    __g.settings.setCampassVisible(false)
+    __g.settings.setMainUIVisibility(false)
+    __g.reset(1)
+}
 
 /**
  * 天气初始化
@@ -28,7 +45,6 @@ const initWeather = () => {
     __g.weather.setSunIntensity(5)
     // 重置环境光
     __g.weather.setAmbientLightIntensity(0.6)
-    __g.settings.SetScreenControlsVisible(false)
 }
 
 /**
@@ -41,22 +57,16 @@ const onReady = async () => {
 
     console.log('[AirCity] onReady - 场景初始化开始')
 
-    // 1. 天气初始化
+    // 1. 场景基础设置
+    initScene()
+
+    // 2. 天气初始化
     initWeather()
 
-    // 2. 隐藏指南针
-    // __g.settings.setCampassVisible(false)
-
-    // 3. 隐藏主界面 UI
-    __g.misc.setMainUIVisibility(true)
-
-    // 4. 设置相机位置 (经度, 纬度, 高度, 俯仰角, 偏航角, 滚转角)
-    // __g.camera.set(64.669062, -549.725312, 50.88562, -20.441519, -38.935188, 0)
+    // 3. 设置相机位置 ([x, y, z, 俯仰角, 偏航角, 滚转角], 视角模式)
+    __g.camera.set([612194.809063, 2657027.984844, 413.476406, -18.165979, -24.901295, -0], 0)
 
     console.log('[AirCity] onReady - 场景初始化完成')
-
-    // 5. 绑定视频元素点击事件（用于获取鼠标坐标）
-    // bindVideoClick()
 }
 
 export default onReady

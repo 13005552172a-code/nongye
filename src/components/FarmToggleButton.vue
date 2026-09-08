@@ -2,7 +2,7 @@
     <button
         type="button"
         class="farm-btn"
-        :class="{ 'is-selected': selected }"
+        :class="[pos === 'right' ? 'farm-btn--right' : 'farm-btn--left', { 'is-selected': selected }]"
         @click="handleClick"
     >
         <span class="farm-btn__dot"></span>
@@ -16,8 +16,10 @@ withDefaults(
     defineProps<{
         /** 按钮文字 */
         text?: string
+        /** 位置：'left' 左下角 / 'right' 右下角（具体 px 在 style 里的位置类中改） */
+        pos?: 'left' | 'right'
     }>(),
-    { text: '插秧机轨迹' }
+    { text: '插秧机轨迹', pos: 'left' }
 )
 
 // 选中状态，支持 v-model
@@ -26,17 +28,17 @@ const selected = defineModel<boolean>({ default: false })
 const emit = defineEmits<{ (e: 'toggle', value: boolean): void }>()
 
 const handleClick = () => {
-    selected.value = !selected.value
-    emit('toggle', selected.value)
+    // 注意：父组件用 v-model 绑定时，selected.value 赋值后属性不会立刻同步，
+    // 直接读 selected.value 会拿到旧值，所以先把新状态算出来再派发
+    const next = !selected.value
+    selected.value = next
+    emit('toggle', next)
 }
 </script>
 
 <style scoped>
 .farm-btn {
     position: absolute;
-    /* 按钮位置：距左 / 距下（在这里改，不用行内样式） */
-    left: 24px;
-    bottom: 24px;
     z-index: 20;
     display: inline-flex;
     align-items: center;
@@ -62,6 +64,17 @@ const handleClick = () => {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
     transition: all 0.18s ease;
+}
+
+/* 按钮位置：距左 / 距下（在这里改，不用行内样式） */
+.farm-btn--left {
+    left: 24px;
+    bottom: 24px;
+}
+
+.farm-btn--right {
+    right: 24px;
+    bottom: 24px;
 }
 
 .farm-btn:hover {
